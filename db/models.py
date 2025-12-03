@@ -17,7 +17,7 @@ class Genre(models.Model):
 
 
 class Movie(models.Model):
-    title = models.CharField(max_length=100, db_index=True)  # додано індекс
+    title = models.CharField(max_length=100, db_index=True)
     description = models.TextField(blank=True)
     actors = models.ManyToManyField(Actor, related_name="movies")
     genres = models.ManyToManyField(Genre, related_name="movies")
@@ -53,8 +53,8 @@ class Order(models.Model):
         ordering = ["-created_at"]
 
     def __str__(self) -> str:
-        # повертаємо старий формат для тестів
-        return str(self.created_at)
+        # ПОВЕРНУТО до формату, який очікує тест: без <Order: ...>
+        return str(self.created_at.strftime('%Y-%m-%d %H:%M:%S'))
 
 
 class Ticket(models.Model):
@@ -100,5 +100,5 @@ class Ticket(models.Model):
 
     def __str__(self) -> str:
         return (f"{self.movie_session.movie.title} "
-                f"{self.movie_session.show_time} "
+                f"{self.movie_session.show_time.strftime('%Y-%m-%d %H:%M:%S')} "
                 f"(row: {self.row}, seat: {self.seat})")

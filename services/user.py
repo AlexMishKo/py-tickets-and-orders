@@ -2,11 +2,12 @@ from typing import Any, Optional
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 
-User: type[AbstractUser] = get_user_model()
-
 
 def create_user(username: str, password: str, **kwargs: Any) -> AbstractUser:
-    user = User.objects.create_user(username=username, password=password)
+    user = get_user_model().objects.create_user(
+        username=username,
+        password=password
+    )
     for field, value in kwargs.items():
         setattr(user, field, value)
     user.save()
@@ -14,11 +15,11 @@ def create_user(username: str, password: str, **kwargs: Any) -> AbstractUser:
 
 
 def get_user(user_id: int) -> AbstractUser:
-    return User.objects.get(id=user_id)
+    return get_user_model().objects.get(id=user_id)
 
 
 def update_user(user_id: int, **kwargs: Any) -> AbstractUser:
-    user = User.objects.get(id=user_id)
+    user = get_user(user_id)
     password: Optional[str] = kwargs.pop("password", None)
     for field, value in kwargs.items():
         setattr(user, field, value)
