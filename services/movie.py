@@ -9,7 +9,7 @@ def get_movies(
     genres_ids: Optional[Iterable[int]] = None,
     actors_ids: Optional[Iterable[int]] = None
 ) -> QuerySet[Movie]:
-    qs = Movie.objects.all()
+    qs = Movie.objects.all().order_by("id")
     if title:
         qs = qs.filter(title__icontains=title)
     if genres_ids:
@@ -40,5 +40,4 @@ def create_movie(
     )
     movie.genres.set(genres)
     movie.actors.set(actors)
-    movie.save()
     return movie
